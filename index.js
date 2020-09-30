@@ -1,10 +1,10 @@
 const htmlparser = require('htmlparser2');
 const escapeStringRegexp = require('escape-string-regexp');
-const { klona } = require('klona');
-const { isPlainObject } = require('is-plain-object');
+const klona = require('klona');
+const isPlainObject = require('is-plain-object');
 const deepmerge = require('deepmerge');
 const parseSrcset = require('parse-srcset');
-const { parse: postcssParse } = require('postcss');
+const postcss = require('postcss');
 const url = require('url');
 // Tags that can conceivably represent stand-alone media.
 const mediaTags = [
@@ -39,7 +39,7 @@ function filter(a, cb) {
 }
 
 function isEmptyObject(obj) {
-  for (const key in obj) {
+  for (var key in obj) {
     if (has(obj, key)) {
       return false;
     }
@@ -378,7 +378,7 @@ function sanitizeHtml(html, options, _recursing) {
             }
             if (a === 'style') {
               try {
-                const abstractSyntaxTree = postcssParse(name + ' {' + value + '}');
+                const abstractSyntaxTree = postcss.postcssParse(name + ' {' + value + '}');
                 const filteredAST = filterCss(abstractSyntaxTree, options.allowedStyles);
 
                 value = stringifyStyleAttributes(filteredAST);
